@@ -1,0 +1,97 @@
+{
+  "snapshotVersion": "2026-08-17",
+  "project": {
+    "name": "ZON Store",
+    "domain": "https://zonstore-g8cmxtfa.manus.space",
+    "checkpoint": "5b3284c8",
+    "snapshotType": "sanitized-public-configuration",
+    "containsSecrets": false,
+    "containsCustomerPersonalData": false
+  },
+  "shopify": {
+    "integration": "headless-storefront",
+    "storeDomain": "zonstore-g8cmxtfa-owl-blossom-uzvjawsp.myshopify.com",
+    "catalog": [
+      {
+        "title": "COMMUNITY",
+        "handle": "community-tee",
+        "type": "T-Shirt",
+        "price": "500.00 EGP",
+        "sizes": ["Medium", "Large", "X-Large", "XX-Large"],
+        "inventoryPerSize": 10,
+        "totalInventory": 40,
+        "image": "https://cdn.shopify.com/s/files/1/0778/5873/4237/files/aWwVFRlOmKqMPeuD.webp?v=1786878309",
+        "status": "ACTIVE"
+      },
+      {
+        "title": "WALK WITH GOD",
+        "handle": "walk-with-god-tee",
+        "type": "T-Shirt",
+        "price": "500.00 EGP",
+        "sizes": ["Medium", "Large", "X-Large", "XX-Large"],
+        "inventoryPerSize": 10,
+        "totalInventory": 40,
+        "status": "ACTIVE"
+      },
+      {
+        "title": "ZON Signature Oversized Tee",
+        "handle": "zon-signature-oversized-tee-real",
+        "type": "T-Shirt",
+        "price": "500.00 EGP",
+        "sizes": ["Medium", "Large", "X-Large", "XX-Large"],
+        "inventoryPerSize": 10,
+        "totalInventory": 40,
+        "status": "ACTIVE"
+      },
+      {
+        "title": "ZON Preview After Hours Hoodie",
+        "handle": "zon-preview-after-hours-hoodie",
+        "type": "Hoodie",
+        "price": "1450.00 EGP",
+        "sizes": ["One Size"],
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  "applicationStorage": {
+    "browserLocalStorage": [
+      { "key": "commerce:cart-id", "purpose": "Shopify cart identifier", "sensitive": true, "retention": "until cart is cleared" },
+      { "key": "zon:wishlist:v1", "purpose": "anonymous wishlist product references", "sensitive": false },
+      { "key": "zon:discount-drafts", "purpose": "admin-side discount drafts only; not real Shopify discounts", "sensitive": true, "recommendation": "clear after copying to Shopify" },
+      { "key": "theme", "purpose": "display preference", "sensitive": false }
+    ],
+    "sessionStorage": [
+      { "key": "manus-cookie", "purpose": "preview/auth session transport", "sensitive": true, "neverExport": true }
+    ],
+    "uploadedAssets": {
+      "sourceOfTruth": "Shopify CDN / managed object storage",
+      "policy": "Do not commit media bytes or private upload URLs into source code."
+    }
+  },
+  "database": {
+    "declaredTables": [
+      {
+        "name": "users",
+        "purpose": "OAuth-linked application users and admin role",
+        "sensitiveFields": ["openId", "name", "email", "loginMethod", "role", "lastSignedIn"],
+        "exportPolicy": "metadata and counts only; never export raw rows into public JSON"
+      },
+      {
+        "name": "order_tracking",
+        "purpose": "customer order tracking records",
+        "sensitiveFields": ["orderNumber", "customerEmail", "trackingUrl", "status"],
+        "exportPolicy": "redacted aggregates only; never publish raw order rows"
+      }
+    ],
+    "lastReadOnlyCheck": {
+      "status": "ready-empty",
+      "result": "The users and order_tracking tables now exist and contain 0 rows at the time of this snapshot. No personal rows were exported.",
+      "nextAction": "Keep encrypted backups and avoid placing raw customer rows in public JSON exports."
+    }
+  },
+  "securityPolicy": {
+    "neverExport": ["DATABASE_URL", "JWT_SECRET", "SHOPIFY_STOREFRONT_API_ACCESS_TOKEN", "OAuth cookies", "customer emails", "customer names", "order numbers", "tracking URLs"],
+    "adminControls": ["adminProcedure protects admin order mutations", "Shopify Admin token is not shipped to the browser", "discount page creates local drafts only and sends staff to Shopify for real discount creation"],
+    "recommendedControls": ["HTTPS-only cookies with Secure, HttpOnly and SameSite protections", "rate limiting and audit logging on order lookup", "least-privilege Shopify credentials", "encrypted backups with a separate key", "scheduled secret rotation", "database migration and daily encrypted backups"]
+  }
+}
